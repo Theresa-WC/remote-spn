@@ -1,4 +1,4 @@
-# .github/workflows/archive-pages.yml (版本 3 - 修正版)
+# .github/workflows/archive-pages.yml (版本 4 - 流式输出修正版)
 
 name: '云端归档页面 (Run spn.sh)'
 
@@ -30,7 +30,7 @@ jobs:
           curl -L -o spn.sh https://raw.githubusercontent.com/overcast07/wayback-machine-spn-scripts/main/spn.sh
           chmod +x spn.sh
 
-      # 核心步骤：运行脚本
+      # 核心步骤：运行脚本 (现在支持流式输出)
       - name: Run Archive Script
         id: spn_run
         env:
@@ -41,18 +41,18 @@ jobs:
             exit 1
           fi
 
-          echo "Starting spn.sh with custom arguments..."
+          echo "Starting spn.sh with custom arguments. Output will stream below:"
           
-          # [修正] 移除了不存在的 -v 参数
-          ./spn.sh -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}" > spn_output.log
+          # [修正] 使用 tee 实现流式输出同时保存到文件
+          ./spn.sh -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}" | tee spn_output.log
 
-          echo "Script finished. Full output log:"
-          cat spn_output.log
+          echo "Script finished. Extracting data directory from log..."
 
+          # 从保存的日志文件中提取数据目录路径
           DATA_DIR=$(grep 'Data folder:' spn_output.log | awk '{print $3}')
 
           if [ -z "$DATA_DIR" ]; then
-            echo "::error::Could not determine the spn.sh data directory from the output."
+            echo "::error::Could not determine the spn.sh data directory from the output. Please check the full log above."
             exit 1
           fi
           
