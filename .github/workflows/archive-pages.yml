@@ -1,4 +1,4 @@
-# .github/workflows/archive-pages.yml (版本 2)
+# .github/workflows/archive-pages.yml (版本 3 - 修正版)
 
 name: '云端归档页面 (Run spn.sh)'
 
@@ -12,7 +12,6 @@ on:
       spn_args:
         description: 'spn.sh 的其他参数 (例如 -n -w 7 -o ".*")'
         required: false
-        # 默认值可以为空
         default: ''
         type: string
 
@@ -34,11 +33,9 @@ jobs:
       # 核心步骤：运行脚本
       - name: Run Archive Script
         id: spn_run
-        # 使用 env 将 Secret 安全地注入到运行环境中
         env:
           SPN_API_KEY: ${{ secrets.SPN_API_KEY }}
         run: |
-          # 检查 API_KEY 是否为空，如果为空则报错退出
           if [ -z "$SPN_API_KEY" ]; then
             echo "::error::SPN_API_KEY secret not found or is empty. Please configure it in repository settings."
             exit 1
@@ -46,21 +43,16 @@ jobs:
 
           echo "Starting spn.sh with custom arguments..."
           
-          # 动态构建并执行命令
-          # -v: 强制脚本打印数据目录，这是我们捕获路径的关键
-          # -a "$SPN_API_KEY": 从环境中安全地读取 API 密钥
-          # ${{ inputs.spn_args }}: 插入用户输入的其他所有参数
-          # "${{ inputs.target_url }}": 将 URL作为最后一个参数，并用引号包裹以防特殊字符
-          ./spn.sh -v -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}" > spn_output.log
+          # [修正] 移除了不存在的 -v 参数
+          ./spn.sh -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}" > spn_output.log
 
           echo "Script finished. Full output log:"
           cat spn_output.log
 
-          # 从日志中提取数据目录路径（此部分逻辑不变）
           DATA_DIR=$(grep 'Data folder:' spn_output.log | awk '{print $3}')
 
           if [ -z "$DATA_DIR" ]; then
-            echo "::error::Could not determine the spn.sh data directory. Ensure the -v flag is active."
+            echo "::error::Could not determine the spn.sh data directory from the output."
             exit 1
           fi
           
