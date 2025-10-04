@@ -53,5 +53,5 @@ jobs:
         with:
           name: spn-results
           # spn.sh 默认将文件保存在这个路径下
-          path: ~/.local/share/spn-data/
+          path: /home/runner/spn-data
           if-no-files-found: warn # 如果没有文件产生，仅警告不报错
