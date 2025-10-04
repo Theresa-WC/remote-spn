@@ -43,29 +43,15 @@ jobs:
 
           echo "Starting spn.sh with custom arguments. Output will stream below:"
           
-          # [修正] 使用 tee 实现流式输出同时保存到文件
-          ./spn.sh -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}" | tee spn_output.log
+          # [修正] 不再保存spn_output.log
+          ./spn.sh -a "$SPN_API_KEY" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
 
-          echo "Script finished. Extracting data directory from log..."
-
-          # 从保存的日志文件中提取数据目录路径
-          DATA_DIR=$(grep 'Data folder:' spn_output.log | awk '{print $3}')
-
-          if [ -z "$DATA_DIR" ]; then
-            echo "::error::Could not determine the spn.sh data directory from the output. Please check the full log above."
-            exit 1
-          fi
-          
-          echo "Detected data directory: $DATA_DIR"
-          echo "data_dir_path=$DATA_DIR" >> "$GITHUB_OUTPUT"
-
-      # 提交文件的步骤（此部分无需修改）
-      - name: Commit Archive Files to Repo
-        uses: stefanzweifel/git-auto-commit-action@v5
+      # 步骤 4: 上传结果文件
+      # 脚本运行结束后，工作环境会被销毁，所以需要将结果文件打包上传
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v4
         with:
-          file_pattern: ${{ steps.spn_run.outputs.data_dir_path }}/*
-          commit_message: "chore: 归档新的SPN任务结果"
-          repository: /home/runner
-          commit_user_name: GitHub Actions Bot
-          commit_user_email: actions@github.com
-          commit_author: GitHub Actions Bot <actions@github.com>
+          name: spn-results
+          # spn.sh 默认将文件保存在这个路径下
+          path: ~/.local/share/spn-data/
+          if-no-files-found: warn # 如果没有文件产生，仅警告不报错
