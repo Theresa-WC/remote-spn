@@ -18,6 +18,7 @@ on:
           - Temp1
           - Temp2
           - Temp3
+          - Temp4
         default: 'Temp1'
       spn_args:
         description: 'spn.sh 的其他参数 (例如 -n -w 7 -o ".*")'
@@ -51,6 +52,8 @@ jobs:
             echo "SELECTED_API_KEY=${{ secrets.SPN_API_KEY_NGH3U83F9 }}" >> $GITHUB_ENV
           elif [[ "${{ inputs.api_key_choice }}" == "Temp3" ]]; then
             echo "SELECTED_API_KEY=${{ secrets.SPN_API_KEY_BRENDASRIVERA }}" >> $GITHUB_ENV
+          elif [[ "${{ inputs.api_key_choice }}" == "Temp4" ]]; then
+            echo "SELECTED_API_KEY=${{ secrets.SPN_API_KEY_ERICAPEARSON }}" >> $GITHUB_ENV
           else
             echo "::error::Invalid API Key choice selected."
             exit 1
