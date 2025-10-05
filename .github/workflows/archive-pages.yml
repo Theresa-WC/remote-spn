@@ -1,4 +1,4 @@
-# .github/workflows/archive-pages.yml (ver.6)
+# .github/workflows/archive-pages.yml (ver.7 - 解决并发冲突)
 
 name: '云端归档页面 (Run spn.sh)'
 
@@ -9,14 +9,13 @@ on:
         description: '要归档的目标 URL'
         required: true
         type: string
-      # 新增：API Key 选择器
       api_key_choice:
         description: '选择要使用的 API Key'
         required: true
         type: choice
         options:
-          - Formal # 这是一个显示给用户的友好名称
-          - Temp1     # 另一个友好名称
+          - Formal
+          - Temp1
           - Temp2
         default: 'Temp2'
       spn_args:
@@ -40,7 +39,6 @@ jobs:
           curl -L -o spn.sh https://raw.githubusercontent.com/overcast07/wayback-machine-spn-scripts/main/spn.sh
           chmod +x spn.sh
 
-      # 新增步骤：根据用户选择设置 API Key
       - name: Select API Key
         id: set_key
         run: |
@@ -55,60 +53,44 @@ jobs:
             exit 1
           fi
 
-      # 核心步骤：运行脚本 (使用选择的 Key)
       - name: Run Archive Script
         id: spn_run
         run: |
-          # 检查上一步设置的密钥是否存在
           if [ -z "${{ env.SELECTED_API_KEY }}" ]; then
-            echo "::error::Selected API_KEY is not available or secret is not configured. Please check repository secrets."
+            echo "::error::Selected API_KEY is not available or secret is not configured."
             exit 1
           fi
+          # [重要] 强制指定输出目录，确保路径一致性
+          ./spn.sh -f /home/runner/spn-data -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
 
-          echo "Starting spn.sh with custom arguments. Output will stream below:"
-          
-          # 使用 SELECTED_API_KEY 环境变量
-          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
-
-      # 新增步骤：将结果文件准备好以便提交
       - name: Prepare Files for Commit
         run: |
-          # 在仓库中创建一个用于存放结果的目录
           mkdir -p archive_results
-          # 检查源目录是否存在且不为空
           if [ -d "/home/runner/spn-data" ] && [ "$(ls -A /home/runner/spn-data)" ]; then
-            # 将所有生成的文件复制到仓库内的 archive_results 目录
             cp -r /home/runner/spn-data/* archive_results/
             echo "Files copied to archive_results/ for commit."
           else
             echo "No files generated in /home/runner/spn-data. Nothing to commit."
           fi
+      
+      # 新增步骤：在提交前拉取最新更改
+      - name: Pull latest changes from remote
+        run: git pull --rebase
 
       # 核心步骤：使用 Action 提交更改
       - name: Commit Archive Files to Repo
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          # 提交动态生成的 commit 消息，更具可读性
           commit_message: "chore: 归档 ${{ inputs.target_url }} 的结果"
-          
-          # [修正] file_pattern: 指定要添加到 commit 的文件
-          # 我们现在监控仓库内的 archive_results 目录
           file_pattern: archive_results/**
-          
-          # [修正] repository: 无需设置，Action 默认在当前 checkout 的仓库中操作
-          # repository: . 
-
-          # 设置提交者信息
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
           commit_author: GitHub Actions Bot <github-actions[bot]@users.noreply.github.com>
 
       # 上传结果文件
-      # 脚本运行结束后，工作环境会被销毁，所以需要将结果文件打包上传
       - name: Upload results as artifact
         uses: actions/upload-artifact@v4
         with:
           name: spn-results
-          # spn.sh 默认将文件保存在这个路径下
           path: /home/runner/spn-data
-          if-no-files-found: warn # 如果没有文件产生，仅警告不报错
+          if-no-files-found: warn
