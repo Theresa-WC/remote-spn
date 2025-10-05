@@ -56,6 +56,18 @@ jobs:
             exit 1
           fi
 
+      # ====================================================================
+      # 新增步骤：在此处显示选择的参数
+      # ====================================================================
+      - name: Display Selected Parameters
+        run: |
+          echo "================ Parameters ================"
+          echo "  URL to archive: ${{ github.event.inputs.target_url }}"
+          echo "  API Key profile: ${{ github.event.inputs.api_key_choice }}"
+          echo "  Additional args: ${{ github.event.inputs.spn_args || 'None' }}"
+          echo "=========================================="
+      # ====================================================================
+
       - name: Run Archive Script
         id: spn_run
         run: |
