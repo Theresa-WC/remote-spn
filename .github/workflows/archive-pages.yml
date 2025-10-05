@@ -60,8 +60,8 @@ jobs:
             echo "::error::Selected API_KEY is not available or secret is not configured."
             exit 1
           fi
-          # [重要] 强制指定输出目录，确保路径一致性
-          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
+          # [修改] 忽略 [Status request failed] 警告
+          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}" | grep -v "Status request failed"
 
       - name: Prepare Files for Commit
         run: |
