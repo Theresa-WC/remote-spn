@@ -61,7 +61,7 @@ jobs:
             exit 1
           fi
           # [重要] 强制指定输出目录，确保路径一致性
-          ./spn.sh -f /home/runner/spn-data -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
+          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}"
 
       - name: Prepare Files for Commit
         run: |
