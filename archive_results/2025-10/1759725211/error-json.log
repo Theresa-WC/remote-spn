@@ -1,0 +1,2 @@
+{"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://mirror.chromaso.net/favicon.ico (HTTP status=504).","resources":[],"job_id":"spn2-0f6ec0f539388201df5e4669278a177baa5fc632"}
+{"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://mirror.chromaso.net/favicon.ico (HTTP status=504).","resources":[],"job_id":"spn2-0f6ec0f539388201df5e4669278a177baa5fc632"}
