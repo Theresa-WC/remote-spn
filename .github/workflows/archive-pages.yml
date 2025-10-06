@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       target_url:
-        description: '要归档的目标 URL'
+        description: '要归档的目标 URL(s)'
         required: true
         type: string
       api_key_choice:
@@ -79,7 +79,7 @@ jobs:
             exit 1
           fi
           # [修改] 忽略 [Status request failed] 警告
-          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} "${{ inputs.target_url }}" | grep --line-buffered -v "Status request failed"
+          ./spn.sh -a "${{ env.SELECTED_API_KEY }}" ${{ inputs.spn_args }} ${{ inputs.target_url }} | grep --line-buffered -v "Status request failed"
 
       - name: Prepare Files for Commit
         run: |
