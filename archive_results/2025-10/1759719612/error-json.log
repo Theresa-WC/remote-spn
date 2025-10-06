@@ -1,0 +1,4 @@
+{"status":"error","status_ext":"error:job-failed","message":"Job failed"}
+{"status":"error","status_ext":"error:proxy-error","message":"SPN internal proxy error.","resources":[],"job_id":"spn2-b147864ef77fa46e47efa6851230c71d36ac6c22"}
+{"status":"error","status_ext":"error:proxy-error","message":"SPN internal proxy error.","resources":[],"job_id":"spn2-b147864ef77fa46e47efa6851230c71d36ac6c22"}
+{"status":"error","status_ext":"error:proxy-error","message":"SPN internal proxy error.","resources":[],"job_id":"spn2-b147864ef77fa46e47efa6851230c71d36ac6c22"}
