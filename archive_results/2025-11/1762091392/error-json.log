@@ -1,0 +1,2 @@
+{"job_id":"spn2-07553086b8aa88249c932fa4a4a3f46d5f57507c","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.com/favicon.ico (HTTP status=504)."}
+{"job_id":"spn2-07553086b8aa88249c932fa4a4a3f46d5f57507c","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.com/favicon.ico (HTTP status=504)."}
