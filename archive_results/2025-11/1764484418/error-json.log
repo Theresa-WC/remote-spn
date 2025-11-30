@@ -1,0 +1,3 @@
+{"job_id":"spn2-605c2744be579a33e6da5a6ca97a507b91276799","resources":[],"status":"error","status_ext":"error:no-captures","message":"Save Page Now could not capture this URL because it was unreachable. If the site is online, it may be blocking access from our service."}
+{"job_id":"spn2-b45760b727f642a912f47a7bfa810c8c7e47ce16","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.ru/favicon.ico (HTTP status=504)."}
+{"job_id":"spn2-245ade7dd6c5ae20381570b1ab29a9272edb3807","resources":[],"status":"error","status_ext":"error:browser-running-error","message":"Save Page Now browser crashed on https://www.wnacg.ru/photos-view-id-3381593.html."}
