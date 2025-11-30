@@ -1,0 +1,1 @@
+{"job_id":"spn2-2ddc0607bcdd2ec2c077860468b94d876d4e2d2c","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.ru/favicon.ico (HTTP status=504)."}
