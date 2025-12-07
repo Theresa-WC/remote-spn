@@ -1,0 +1,4 @@
+{"job_id":"spn2-6bd269e0404f28cd3b8cefd2532db55c75ed2b9e","resources":[],"status":"error","status_ext":"error:job-failed","message":"Job failed."}
+{"job_id":"spn2-fd3866ab9da9d34ad9dcf0e3a479b9c3636d91ea","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.ru/favicon.ico (HTTP status=504)."}
+{"job_id":"spn2-6bd269e0404f28cd3b8cefd2532db55c75ed2b9e","resources":[],"status":"error","status_ext":"error:job-failed","message":"Job failed."}
+{"job_id":"spn2-fd3866ab9da9d34ad9dcf0e3a479b9c3636d91ea","resources":[],"status":"error","status_ext":"error:gateway-timeout","message":"The target URL returned a Gateway Timeout error. https://www.wnacg.ru/favicon.ico (HTTP status=504)."}
